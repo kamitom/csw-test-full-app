@@ -1,15 +1,18 @@
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-  console.log('env: ', process.env.NODE_ENV)
-}
-
 // const dotenv = require('dotenv');
 // const result = dotenv.config();
 // if (result.error) {
 //   throw result.error;
 // }
 // console.log('result parsed: ', result.parsed);
+
+
+console.log('lookup config: ', process.env.NODE_ENV)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+  console.log('env: ', process.env.NODE_ENV)
+}
+
 
 const express = require('express');
 const app = express();
@@ -24,7 +27,6 @@ app.use(expressLayouts);
 app.use(express.static('public'));
 
 const mongoose = require('mongoose');
-// mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -36,9 +38,9 @@ db.on('error', (error) => {
 });
 
 db.once('open', () => {
-  console.log('connected to mongoose2!');
+  console.log('successful: connected to mongoose2!');
 });
 
 app.use('/', indexRouter);
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 8088);
