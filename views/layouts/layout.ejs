@@ -6,13 +6,7 @@
     <title>EJS-TEST</title>
   </head>
   <body>
-    Before
-    <br />
-    <h1><%= title %></h1>
-    <p><%= description %></p>
-    <br />
-    <%= body %>
-    <br />
-    After
+    <%- include('../partials/header.ejs') %> 
+    <%- body %>
   </body>
 </html>
