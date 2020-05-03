@@ -1,4 +1,3 @@
-
 // const dotenv = require('dotenv');
 // const result = dotenv.config();
 // if (result.error) {
@@ -6,13 +5,11 @@
 // }
 // console.log('result parsed: ', result.parsed);
 
-
-console.log('lookup config: ', process.env.NODE_ENV)
+console.log('lookup config: ', process.env.NODE_ENV);
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
-  console.log('env: ', process.env.NODE_ENV)
+  console.log('env: ', process.env.NODE_ENV);
 }
-
 
 const express = require('express');
 const app = express();
@@ -21,11 +18,14 @@ const expressLayouts = require('express-ejs-layouts');
 const indexRouter = require('./routes/index');
 const authorRouter = require('./routes/authors');
 
+const bodyParser = require('body-parser');
+
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.set('layout', 'layouts/layout');
 app.use(expressLayouts);
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {
