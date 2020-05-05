@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
 // New Book Route
 router.get('/new', (req, res) => {
-  res.send('New Book');
+  res.send('New Book2');
 });
 
 // Create Book Route
