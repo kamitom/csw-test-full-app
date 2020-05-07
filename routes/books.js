@@ -17,9 +17,19 @@ const upload = multer({
 
 // All Books Route
 router.get('/', async (req, res) => {
-  // res.send('All Books');
+  let searchOptions = {};
+  if (req.query.title != null && req.query.title !== '') {
+    searchOptions.title = new RegExp(req.query.title, 'i');
+  }
 
-  res.render('books/index');
+  try {
+    const books = await Book.find(searchOptions);
+    res.render('books/index', { books2: books, searchOptions2: req.query });
+  } catch (error) {
+    console.log(`error: ${error}`);
+    res.redirect(`/`);
+  }
+
 });
 
 // New Book Route
@@ -58,7 +68,7 @@ router.post('/', upload.single('cover'), async (req, res) => {
 });
 
 const removeBookCover = (fileName) => {
-  console.log(`book cover file name is : ${fileName}`)
+  console.log(`remove book cover : ${fileName}`)
   fs.unlink(path.join(uploadPath, fileName), (err) => {
     if (err) console.error(`remove book cover error: ${err}`);
   });
