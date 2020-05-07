@@ -1,5 +1,8 @@
 const mongooes = require('mongoose');
 
+
+const converImageBasePath = 'uploads/bookCovers'
+
 const bookSchema = new mongooes.Schema({
   title: {
     type: String,
@@ -33,3 +36,4 @@ const bookSchema = new mongooes.Schema({
 });
 
 module.exports = mongooes.model('Book', bookSchema);
+module.exports.converImageBasePath = converImageBasePath;
