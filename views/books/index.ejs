@@ -2,17 +2,26 @@
 <form action="/books" method="GET">
   <div class="form-row">
     <div class="form-item">
-      <label>Book</label>
+      <label>Title</label>
       <input type="text" name="title" value="<%= searchOptions2.title %>" />
     </div>
-    <!-- <div class="form-item">
-      <label>Published After</label>
-      <input type="date" name="publishedAfter" value="<%= searchOptions2.publishedAfter %>" />
-    </div>
+
     <div class="form-item">
       <label>Published Before</label>
-      <input type="date" name="publishedBefore" value="<%= searchOptions2.publishedBefore %>" />
-    </div> -->
+      <input
+        type="date"
+        name="publishedBefore"
+        value="<%= searchOptions2.publishedBefore %>"
+      />
+    </div>
+    <div class="form-item">
+      <label>Published After</label>
+      <input
+        type="date"
+        name="publishedAfter"
+        value="<%= searchOptions2.publishedAfter %>"
+      />
+    </div>
   </div>
   <div class="form-row form-row-end">
     <button class="btn btn-primary" type="submit">Search</button>
@@ -21,6 +30,15 @@
 <br />
 <% books2.forEach(book => { %>
 <div class="book-row">
-  <div class="book-name"><%= book.title %></div>
+  <div class="book-title"><%= book.title %></div>
+  <div class="book-publishDate"><%= book.publishDate %></div>
+  <div class="book-img">
+    <img
+      height="150"
+      width="100"
+      src="<%= book.coverImagePath %>"
+      alt="book image"
+    />
+  </div>
 </div>
 <% }) %>

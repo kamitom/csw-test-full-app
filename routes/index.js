@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const Book = require('../model/book');
 
-const fakerDep = require('../tools/persion')
+const fakerDep = require('../tools/persion');
 
-router.get('/', (req, res) => {
-  // res.send('hello, commonJS module');
-  res.render('index3', {
-    title: 'EJS template ' + fakerDep(200).dep,
-    description: 'mongodb shell: db.inventory.find()',
-  });
+router.get('/', async (req, res) => {
+  let books;
+  try {
+    books = await Book.find().sort({ createdAt: 'desc' }).limit(10).exec();
+
+  } catch (error) {
+    books = [];
+    console.error('find books error:', error);
+  }
+  res.render('index3', { books2: books });
 });
 
 module.exports = router;
