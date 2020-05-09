@@ -1,7 +1,4 @@
 const mongooes = require('mongoose');
-const path = require('path');
-
-const converImageBasePath = 'uploads/bookCovers';
 
 const bookSchema = new mongooes.Schema({
   title: {
@@ -24,7 +21,11 @@ const bookSchema = new mongooes.Schema({
     required: true,
     default: Date.now,
   },
-  coverImageName: {
+  coverImage: {
+    type: Buffer,
+    required: true,
+  },
+  coverImageType: {
     type: String,
     required: true,
   },
@@ -36,10 +37,11 @@ const bookSchema = new mongooes.Schema({
 });
 
 bookSchema.virtual('coverImagePath').get(function () {
-  if (this.coverImageName != null) {
-    return path.join('/', converImageBasePath, this.coverImageName);
+  if (this.coverImage != null && this.coverImageType != null) {
+    return `data:${
+      this.coverImageType
+    };charset=utf-8;base64,${this.coverImage.toString('base64')}`;
   }
 });
 
 module.exports = mongooes.model('Book', bookSchema);
-module.exports.converImageBasePath = converImageBasePath;
