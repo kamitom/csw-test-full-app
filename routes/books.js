@@ -17,7 +17,7 @@ const upload = multer({
 
 // All Books Route
 router.get('/', async (req, res) => {
-  let query = Book.find({});
+  let query = Book.find({}).sort({createdAt: 'desc'}).limit(3);
 
   if (req.query.title != null && req.query.title !== '') {
     query = query.regex('title', new RegExp(req.query.title, 'i'));
