@@ -9,7 +9,7 @@ const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
 // All Books Route
 router.get('/', async (req, res) => {
-  let query = Book.find({}).sort({ createdAt: 'desc' }).limit(13);
+  let query = Book.find({}).sort({ createdAt: 'desc' }).limit(5);
 
   if (req.query.title != null && req.query.title !== '') {
     query = query.regex('title', new RegExp(req.query.title, 'i'));
@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
     pageCount: req.body.pageCount,
     description: req.body.description,
   });
+  console.log('book check: ', book);
   saveCover(book, req.body.cover);
 
   try {
@@ -78,6 +79,8 @@ const renderNewPage = async (res, book, hasError = false) => {
 
 const saveCover = (book, coverEncoded) => {
   if (coverEncoded == null) return;
+  if (coverEncoded == '') return;
+
   const cover = JSON.parse(coverEncoded);
   if (cover != null && imageMimeTypes.includes(cover.type)) {
     book.coverImage = new Buffer.from(cover.data, 'base64');

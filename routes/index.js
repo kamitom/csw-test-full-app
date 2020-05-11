@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     books = [];
     console.error('find books error:', error);
   }
-  res.render('index3', { books2: books });
+  res.render('index3', { books3: books });
 });
 
 module.exports = router;
