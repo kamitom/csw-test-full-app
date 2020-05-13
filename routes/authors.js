@@ -12,7 +12,10 @@ router.get('/', async (req, res) => {
   }
   try {
     const authors = await Author.find(searchOptions);
-    res.render('authors/index', { authors2: authors, searchOptions2: req.query });
+    res.render('authors/index', {
+      authors2: authors,
+      searchOptions2: req.query,
+    });
   } catch (error) {
     console.log(`error: ${error}`);
     res.redirect(`/`);
@@ -32,8 +35,8 @@ router.post('/', async (req, res) => {
 
   try {
     const newAuthor = await oneNewAuthor.save();
-    // res.redirect(`authors/${newAuthor.id}`);
-    res.redirect(`authors`);
+    res.redirect(`authors/${newAuthor.id}`);
+    // res.redirect(`authors`);
   } catch (error) {
     res.render('authors/new', {
       author: oneNewAuthor,
@@ -43,16 +46,57 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  res.send(`show Author ${req.params.id}`)
-})
-router.get('/:id/edit', (req, res) => {
-  res.send(`Edit Author ${req.params.id}`)
-})
-router.put('/:id', (req, res) => {
-  res.send(`Update Author ${req.params.id}`)
-})
-router.delete('/:id', (req, res) => {
-  res.send(`Delete Author ${req.params.id}`)
-})
+  res.send(`show Author2 ${req.params.id}`);
+});
+router.get('/:id/edit', async (req, res) => {
+  // res.send(`Edit Author ${req.params.id}`)
+
+  try {
+    const authorById = await Author.findById(req.params.id);
+    res.render('authors/edit', { author: authorById });
+  } catch (error) {
+    res.redirect('/authors');
+  }
+});
+router.put('/:id', async (req, res) => {
+  // res.send(`Update Author2 ${req.params.id}`)
+
+  let oneNewAuthor;
+
+  try {
+    oneNewAuthor = await Author.findById(req.params.id);
+    oneNewAuthor.name = req.body.name
+    await oneNewAuthor.save();
+    res.redirect(`/authors/${newAuthor.id}`);
+  } catch (error) {
+    if (oneNewAuthor == null) {
+      res.redirect('/');
+    } else {
+      res.render('authors/edit', {
+        author: oneNewAuthor,
+        errorMessage: 'error updating Author',
+      });
+    }
+  }
+});
+router.delete('/:id', async (req, res) => {
+  // res.send(`Delete Author ${req.params.id}`);
+
+  let oneNewAuthor;
+
+  try {
+    oneNewAuthor = await Author.findById(req.params.id);
+    
+    await oneNewAuthor.remove();
+
+    res.redirect(`/authors/`);
+  } catch (error) {
+    if (oneNewAuthor == null) {
+      res.redirect('/');
+    } else {
+      res.render(`/authors/${oneNewAuthor.id}`);
+    }
+  }
+});
 
 module.exports = router;

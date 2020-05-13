@@ -19,9 +19,11 @@
   <a href="/authors/<%= author.id %>">View</a>
 
   <a href="/authors/<%= author.id %>/edit">Edit</a>
+<!-- 
+  <form action="/authors/<%= author.id %>?_method=PUT" method="post">
+    <button type="submit">Update</button>
+  </form> -->
 
-  <form action="/authors/<%= author.id %>?_method=DELETE" method="post">
-    <button type="submit">Delete</button>
-  </form>
+  <%- include('../partials/deleteForm.ejs', { url: `/authors/${author.id}`}) %> 
 </div>
 <% }) %>
