@@ -3,6 +3,7 @@ const router = express.Router();
 
 const fakerDep = require('../tools/persion');
 const Author = require('../model/author');
+const Book = require('../model/book');
 
 // all authors route
 router.get('/', async (req, res) => {
@@ -45,9 +46,25 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
-  res.send(`show Author2 ${req.params.id}`);
+// view author
+router.get('/:id', async (req, res) => {
+  // res.send(`show Author2 ${req.params.id}`);
+
+  try {
+    const author = await Author.findById(req.params.id);
+    const books = await Book.find({ author: author.id }).limit(9).exec();
+
+    res.render('authors/show', {
+      booksByAuthor: books,
+      author: author,
+    });
+  } catch (error) {
+    console.log('show author error', error);
+    res.redirect('/');
+  }
 });
+
+// edit author
 router.get('/:id/edit', async (req, res) => {
   // res.send(`Edit Author ${req.params.id}`)
 
@@ -58,6 +75,7 @@ router.get('/:id/edit', async (req, res) => {
     res.redirect('/authors');
   }
 });
+
 router.put('/:id', async (req, res) => {
   // res.send(`Update Author2 ${req.params.id}`)
 
@@ -65,7 +83,7 @@ router.put('/:id', async (req, res) => {
 
   try {
     oneNewAuthor = await Author.findById(req.params.id);
-    oneNewAuthor.name = req.body.name
+    oneNewAuthor.name = req.body.name;
     await oneNewAuthor.save();
     res.redirect(`/authors/${newAuthor.id}`);
   } catch (error) {
@@ -79,6 +97,7 @@ router.put('/:id', async (req, res) => {
     }
   }
 });
+
 router.delete('/:id', async (req, res) => {
   // res.send(`Delete Author ${req.params.id}`);
 
@@ -86,7 +105,7 @@ router.delete('/:id', async (req, res) => {
 
   try {
     oneNewAuthor = await Author.findById(req.params.id);
-    
+
     await oneNewAuthor.remove();
 
     res.redirect(`/authors/`);
@@ -94,7 +113,7 @@ router.delete('/:id', async (req, res) => {
     if (oneNewAuthor == null) {
       res.redirect('/');
     } else {
-      res.render(`/authors/${oneNewAuthor.id}`);
+      res.redirect(`/authors/${oneNewAuthor.id}`);
     }
   }
 });

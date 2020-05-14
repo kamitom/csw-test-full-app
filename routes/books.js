@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
     pageCount: req.body.pageCount,
     description: req.body.description,
   });
-  console.log('book check: ', book);
+  // console.log('book check: ', book);
   saveCover(book, req.body.cover);
 
   try {
